@@ -10,7 +10,9 @@ export class ProductService {
   ) {}
 
   async findAll(): Promise<Product[]> {
-    return this.productRepository.find();
+    const products = this.productRepository.find();
+    if(!products) throw new Error('products is empty!')
+    return products;
   }
 
   async create(product: Partial<Product>): Promise<Product> {
@@ -23,11 +25,15 @@ export class ProductService {
   }
 
   async delete(id: number): Promise<void> {
+    const product =await this.productRepository.findOneById(id);
+    if(!product) throw new Error('product does not exist!')
     await this.productRepository.delete(id);
   }
 
   async findOne(id: number): Promise<Product> {
-    return this.productRepository.findOneById(id);
+    const product =await this.productRepository.findOneById(id);
+    if(!product) throw new Error('product not found!')
+    return product;
   }
 
 }
