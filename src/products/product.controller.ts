@@ -1,53 +1,40 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { ProductService } from "./product.service";
 
-let listProduct =[
-    {
-        productId: 'pr01',
-        name: 'Máy tính'
-    },
-    {
-        productId: 'pr02',
-        name: 'Điện thoại'
-    },
-    {
-        productId: 'pr03',
-        name: 'Tivi'
-    },
-    {
-        productId: 'pr04',
-        name: 'Tủ lạnh'
-    }
-]
 @Controller('products')
 export class ProductController{
-    private products = [];
+    constructor(private readonly productService: ProductService) {}
 
     @Get()
-    getAllProducts(){
-        return this.products;
+    async getAllProducts() {
+        return this.productService.findAll();
     }
 
     @Post()
-    createProduct(@Body() body: any){
-        const {productId, name} = body;
-        const newProduct = {productId, name};
-        this.products.push(newProduct);
+    async createProduct(@Body() body: any){
+        const {name,description, quanlity,color } = body;
+        const newProduct = {name,description, quanlity,color};
+        await this.productService.create(newProduct);
         return newProduct;
     }
 
     @Get(':id')
-    getProduct(@Param('id') id: string){
-        const product = this.products.filter(product => product.productId === id)
+    async getProduct(@Param('id') id: number){
+        const product = await this.productService.findOne(id);
         if(!product) return 'product does not exist!'
         return product;
     }
     @Delete(':id')
-    deleteProduct(@Param('id') id: string){
-
+    async deleteProduct(@Param('id') id: number){
+        const product = await this.productService.delete(id);
+        return product;
     }
 
     @Put(':id')
-    updateProduct(@Param('id') id: string){
-        
+    async updateProduct(@Body() body: any,@Param('id') id: number){
+        const {name,description, quanlity,color } = body;
+        const updateProduct = {name,description, quanlity,color }
+        const product = await this.productService.update(id,updateProduct);
+        return product;
     }
 }
