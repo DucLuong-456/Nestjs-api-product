@@ -1,15 +1,15 @@
 import { Injectable, Inject } from '@nestjs/common';
-// import { CreateCatDto } from './dto/create-cat.dto';
+import { Repository } from 'typeorm';
 import { Product } from './product.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @Inject('PRODUCT_REPOSITORY')
-    private ProductRepository: typeof Product
+    private productRepository: Repository<Product>,
   ) {}
 
   async findAll(): Promise<Product[]> {
-    return this.ProductRepository.findAll<Product>();
+    return this.productRepository.find();
   }
 }

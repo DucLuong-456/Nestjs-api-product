@@ -34,14 +34,13 @@ export class ProductController{
         this.products.push(newProduct);
         return newProduct;
     }
-    
+
     @Get(':id')
     getProduct(@Param('id') id: string){
         const product = this.products.filter(product => product.productId === id)
         if(!product) return 'product does not exist!'
         return product;
     }
-
     @Delete(':id')
     deleteProduct(@Param('id') id: string){
 

@@ -1,17 +1,19 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Table
-export class Product extends Model {
-  @Column
-  productId: string;  
-  @Column
+@Entity()
+export class Product {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ length: 500 })
   name: string;
 
-  @Column
+  @Column('text')
+  description: string;
+
+  @Column('int')
   quanlity: number;
 
-  @Column
+  @Column('text')
   color: string;
-  @Column
-  description: string;
 }
